@@ -1,0 +1,2 @@
+# UnityPMXAutoImporter
+MikuMikuDanceのモデルファイル(.pmx)を変換なしにUnityで読み込むためのコード
