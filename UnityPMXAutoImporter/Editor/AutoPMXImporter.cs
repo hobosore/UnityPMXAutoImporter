@@ -40,7 +40,7 @@ public class AutoPMXImporter : AssetPostprocessor
                 Transform model = await PMXModelLoader.LoadPMXModel(inputFileAbsolutePath, false);
                 if(model == null)
                 {
-                    UnityEngine.Debug.Log("読み込みに失敗したモデルがありました:");
+                    UnityEngine.Debug.Log("読み込みに問題がありました");
                     UnityEngine.Debug.Log(inputFileAbsolutePath);
                     continue;
                 }
@@ -80,10 +80,14 @@ public class AutoPMXImporter : AssetPostprocessor
                     AssetDatabase.CreateAsset(mesh, outputFolderRelativePath + MeshFolderName + mesh.name + MeshExtension);
                 }
 
-                Avatar avatar = model.GetComponent<Animator>().avatar;
-                if (avatar != null)
+                Animator animator = model.GetComponent<Animator>();
+                if (animator != null)
                 {
-                    AssetDatabase.CreateAsset(avatar, outputFolderRelativePath + AvatarFolderName + avatar.name + AvatarExtension);
+                    Avatar avatar = animator.avatar;
+                    if (avatar != null)
+                    {
+                        AssetDatabase.CreateAsset(avatar, outputFolderRelativePath + AvatarFolderName + avatar.name + AvatarExtension);
+                    }
                 }
 
                 foreach (Material material in model.GetComponent<MMDModel>().SkinnedMeshRenderer.sharedMaterials)
