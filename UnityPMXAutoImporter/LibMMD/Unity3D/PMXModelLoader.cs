@@ -23,17 +23,13 @@ public class PMXModelLoader
         {
             mmdModel = await MMDModel.ImportModel(path, autoShowModel);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             UnityEngine.Debug.Log(ex.Message);
             return null;
         }
 
         if (mmdModel == null) { return null; }
-
-        mmdModel.transform.parent = parent;
-        mmdModel.transform.localPosition = Vector3.zero;
-        mmdModel.transform.localRotation = Quaternion.identity;
 
         try
         {
@@ -44,7 +40,7 @@ public class PMXModelLoader
 #if UNITY_EDITOR
             GameObject.DestroyImmediate(avaterMaker);
 #else
-        GameObject.Destroy(avaterMaker);
+            GameObject.Destroy(avaterMaker);
 #endif
 
         }
@@ -54,27 +50,36 @@ public class PMXModelLoader
             UnityEngine.Debug.Log(path);
 
             AvatarMaker avaterMaker = mmdModel.gameObject.GetComponent<AvatarMaker>();
-            #if UNITY_EDITOR
-                        if (avaterMaker != null)
-                        {
-                            GameObject.DestroyImmediate(avaterMaker);
-                        }
-            #else
-                        if (avaterMaker != null)
-                        {
-                            GameObject.Destroy(avaterMaker);
-                        }
-            #endif
+
+#if UNITY_EDITOR
+            if (avaterMaker != null)
+            {
+                GameObject.DestroyImmediate(avaterMaker);
+            }
+#else
+            if (avaterMaker != null)
+            {
+                GameObject.Destroy(avaterMaker);
+            }
+#endif
+
+            mmdModel.transform.parent = parent;
+            mmdModel.transform.localPosition = Vector3.zero;
+            mmdModel.transform.localRotation = Quaternion.identity;
 
             return mmdModel.transform;
         }
-        
+
+        mmdModel.transform.parent = parent;
+        mmdModel.transform.localPosition = Vector3.zero;
+        mmdModel.transform.localRotation = Quaternion.identity;
+
         return mmdModel.transform;
     }
 
     public async static Task<Transform> LoadPMXModel(string path, RuntimeAnimatorController runtimeAnimatorController, bool autoShowModel = true)
     {
-         return await LoadPMXModel(path, runtimeAnimatorController, null, autoShowModel);
+        return await LoadPMXModel(path, runtimeAnimatorController, null, autoShowModel);
     }
 
     public async static Task<Transform> LoadPMXModel(string path, RuntimeAnimatorController runtimeAnimatorController)

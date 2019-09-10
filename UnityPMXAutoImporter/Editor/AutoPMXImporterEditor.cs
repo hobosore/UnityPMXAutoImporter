@@ -7,7 +7,7 @@ using UnityEngine;
 using LibMMD.Unity3D;
 using System.Text.RegularExpressions;
 
-public class AutoPMXImporter : AssetPostprocessor
+public class AutoPMXImporterEditor : AssetPostprocessor
 {
     const string AssetFolderName = "Assets";
     const string outputFolderName = "/Prefab/";
@@ -117,12 +117,16 @@ public class AutoPMXImporter : AssetPostprocessor
 #if UNITY_EDITOR
                 GameObject.DestroyImmediate(mmdModel);
 #else
-        GameObject.Destroy(mmdModel);
+                GameObject.Destroy(mmdModel);
 #endif
 
                 PrefabUtility.SaveAsPrefabAsset(model.gameObject, outputFolderRelativePath + model.name + PrefabExtension);
 
+#if UNITY_EDITOR
                 GameObject.DestroyImmediate(model.gameObject);
+#else
+                GameObject.Destroy(model.gameObject);
+#endif
             }
         }
     }
